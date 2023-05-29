@@ -6,6 +6,7 @@ on:
     inputs:
       versionNumber:
         description: 'Version number'
+        default: "latest"
         type: string
 
 jobs:
@@ -48,14 +49,13 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     name: Tag
-    if: github.event.inputs.versionNumber != ''
-
+    if: ${{ github.event_name == 'push' && inputs.versionNumber != '' }}
     steps:
       - uses: actions/checkout@v1
         name: Checkout code
 
-      - name: Update v${{ inputs.versionNumber }} Tag
+      - name: Update ${{ inputs.versionNumber }} Tag
         uses: hole19/git-tag-action@master
         env:
-          TAG: v${{ inputs.versionNumber }}
+          TAG: ${{ inputs.versionNumber }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
