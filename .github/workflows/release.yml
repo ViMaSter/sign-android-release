@@ -2,8 +2,11 @@ name: "Tag & Deploy Action"
 
 on:
   push:
-    branches:
-      - master
+  workflow_dispatch:
+    inputs:
+      versionNumber:
+        description: 'Version number'
+        type: string
 
 jobs:
   test:
@@ -45,13 +48,14 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     name: Update action
+    if: github.event.inputs.versionNumber != ''
 
     steps:
       - uses: actions/checkout@v1
         name: Checkout code
 
-      - name: Update v1 Tag
+      - name: Update v${{ inputs.versionNumber }} Tag
         uses: hole19/git-tag-action@master
         env:
-          TAG: v1
+          TAG: v${{ inputs.versionNumber }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
