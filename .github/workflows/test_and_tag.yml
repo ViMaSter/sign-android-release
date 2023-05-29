@@ -7,6 +7,7 @@ on:
       versionNumber:
         description: 'Version number'
         default: "latest"
+        required: true
         type: string
 
 jobs:
@@ -45,17 +46,23 @@ jobs:
           keyStorePassword: android
           keyPassword: android
 
+      - run: | 
+          echo "github.event_name: ${{ github.event_name }}"
+          echo "(github.event.inputs.versionNumber || 'latest' ): ${{ (github.event.inputs.versionNumber || 'latest' ) }}"
+          echo "github.ref: ${{ github.ref }}"
+          echo "github.event_name == 'push' && (github.event.inputs.versionNumber || 'latest' ) != '' && github.ref == 'refs/heads/master': ${{ github.event_name == 'push' && (github.event.inputs.versionNumber || 'latest' ) != '' && github.ref == 'refs/heads/master' }}"
+
   release:
     needs: test
     runs-on: ubuntu-latest
     name: Tag
-    if: ${{ github.event_name == 'push' && inputs.versionNumber != '' }}
+    if: ${{ github.event_name == 'push' && (github.event.inputs.versionNumber || 'latest' ) != '' && github.ref == 'refs/heads/master' }}
     steps:
       - uses: actions/checkout@v1
         name: Checkout code
 
-      - name: Update ${{ inputs.versionNumber }} Tag
+      - name: Update ${{ (github.event.inputs.versionNumber || 'latest' ) }} Tag
         uses: hole19/git-tag-action@master
         env:
-          TAG: ${{ inputs.versionNumber }}
+          TAG: ${{ (github.event.inputs.versionNumber || 'latest' ) }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
