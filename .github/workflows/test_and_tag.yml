@@ -1,4 +1,4 @@
-name: "Tag & Deploy Action"
+name: "Test & Tag"
 
 on:
   push:
@@ -11,7 +11,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    name: Test action
+    name: Test
 
     steps:
       - uses: actions/checkout@v1
@@ -47,7 +47,7 @@ jobs:
   release:
     needs: test
     runs-on: ubuntu-latest
-    name: Update action
+    name: Tag
     if: github.event.inputs.versionNumber != ''
 
     steps:
