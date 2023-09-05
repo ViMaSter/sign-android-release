@@ -16,7 +16,7 @@ jobs:
     name: Test
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         name: Checkout code
 
       - name: Run tests
@@ -52,7 +52,7 @@ jobs:
     name: Tag
     if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         name: Checkout code
 
       - name: Update ${{ (github.event.inputs.versionNumber || 'latest' ) }} Tag
