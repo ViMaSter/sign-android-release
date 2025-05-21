@@ -1,5 +1,6 @@
 name: Merge `autoupdate` branches
 on:
+  workflow_dispatch:
   workflow_run:
     workflows: ["Test & Tag"]
     types: 
