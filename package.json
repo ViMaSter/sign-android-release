@@ -6,6 +6,7 @@
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",
+    "release": "ncc build lib/main.js && git add -f dist/",
     "test": "jest",
     "deploy": "tsc && ./update_release.sh"
   },
